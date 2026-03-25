@@ -89,16 +89,16 @@ const verifyUser=async(req,res)=>{
     const user=await User.findOne ({verificationToken:token})
     if(!user){
         return res.status(400).json({
-            message:"Invalid token"
+            message:"Invalid token,User is not Registed!"
         })
     }else{
         user.isVerified=true
+        await user.save()
         return res.status(200).json({
             message:"Verified User",
             Username:user.name
         })
     }    
-
 }
   
 export {registeredUser,verifyUser}
