@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-
+import bcryptjs from "bcryptjs"
 const userSchema=new mongoose.Schema({
     name:String,
     email:String,
@@ -28,7 +28,11 @@ const userSchema=new mongoose.Schema({
 
 //Adding Hooks
 //Pre Hook
-userSchema.pre("save", async )
+userSchema.pre("save", async function(next){
+    if(this.isModified("password")){
+        this.password= await bcryptjs.hash(this.password,10) 
+    }
+})
 
 
 const user= mongoose.model('User',userSchema);

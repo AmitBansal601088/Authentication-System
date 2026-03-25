@@ -39,7 +39,7 @@ const registeredUser = async (req, res) => {
 
         // Setup mail transporter
         const transporter = nodemailer.createTransport({
-            host: "process.env.HOST",
+            host: process.env.HOST,
             port: 2525,
             secure: false,
             auth: {
