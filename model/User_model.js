@@ -25,5 +25,11 @@ const userSchema=new mongoose.Schema({
 },{
     timestamps:true
 })
+
+//Adding Hooks
+//Pre Hook
+userSchema.pre("save", async )
+
+
 const user= mongoose.model('User',userSchema);
 export default user

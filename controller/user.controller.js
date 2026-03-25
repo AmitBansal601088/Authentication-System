@@ -39,7 +39,7 @@ const registeredUser = async (req, res) => {
 
         // Setup mail transporter
         const transporter = nodemailer.createTransport({
-            host: "sandbox.smtp.mailtrap.io",
+            host: "process.env.HOST",
             port: 2525,
             secure: false,
             auth: {
@@ -93,6 +93,9 @@ const verifyUser=async(req,res)=>{
         })
     }else{
         user.isVerified=true
+        await user.updateOne({
+            $unset:{verificationToken:""}
+        })
         await user.save()
         return res.status(200).json({
             message:"Verified User",
