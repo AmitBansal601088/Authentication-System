@@ -1,6 +1,9 @@
 import User from '../model/User_model.js'
 import crypto from 'crypto'
 import nodemailer from 'nodemailer'
+import jwt from "jasonwebtoken"
+import bcryptjs from "bcryptjs"
+import cookieParser from 'cookie-parser'
 import dotenv from "dotenv"
 dotenv.config()
 const registeredUser = async (req, res) => {
@@ -103,5 +106,56 @@ const verifyUser=async(req,res)=>{
         })
     }    
 }
+
+const loginUser= async (req,res)=>{
+    const {email, password} = req.body
+    if (!email || !password){
+        return res.status(400).json({
+            message: "All fields are required",
+            success: false
+        });
+    }
+    try{
+        const user = await User.findOne({email});
+        if(!user){
+            return res.status(400).json({
+                message:"Invalid email or password!"
+            })  
+        }
+        const isMatch=await bcryptjs.compare(password,user.password)
+        if(!isMatch){
+            return res.status(400).json({
+                message:"Invalid email or password!"
+            })
+        }
+        if(!user.isVerified){
+            return res.status(400).json({
+                message:'User is not verified, Please verify your email!'
+            })
+        }
+        const secretkey=process.env.SECRETKEY;
+        const token= jwt.sign({id:user._id}, secretkey,{expiresIn:'24h'})
+        const options={
+            httpOnly:true,
+            secure:true
+        }
+        res.cookie("test",token,options)
+        res.status(200).json({
+            success:true,
+            message:'Login Successful',
+            user:{
+                id:user._id,
+                name:user.name
+            }
+        })
+    }
+    catch(error){
+        return res.status(400).json({
+                message:"Internal Error!",
+                error:error.message
+            })
+    }
+
+}
   
-export {registeredUser,verifyUser}
+export {registeredUser, verifyUser, loginUser}

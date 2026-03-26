@@ -15,6 +15,7 @@ app.use(cors({
     methods:['GET','POST','DELETE','OPTIONS'],
     allowedHeaders:['Content-Type','Authorization']
 }))
+app.use(cookieParser())
 app.use(express.json())  // such that express server start accepting json format data from client
 app.use(express.urlencoded({extended:true}))
 const port = process.env.PORT || 3000 
