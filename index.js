@@ -2,7 +2,7 @@ import express from "express"
 import dotenv from "dotenv"
 import cors from "cors"
 import db from "./util/db.js"
-
+import cookieParser from "cookie-parser"
 //import all routes
 import userRoutes from './Router/user.route.js'
 dotenv.config()   // agar alag folder mein hai env file toh uska path dena pdega,agar root folder mein hai toh no need
