@@ -34,6 +34,6 @@ userSchema.pre("save", async function(next){
     }
 })
 
-
+history
 const user= mongoose.model('User',userSchema);
 export default user
